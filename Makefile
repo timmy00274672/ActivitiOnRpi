@@ -10,7 +10,7 @@ CLASSPATH += target/test-classes
 CLASSPATH += target/dependency/*
 
 #JAVA_FLAG += -Djava.library.path=./target/jni
-
+MAVEN_FLAG= -e -DskipTests
 CLEANPATH += target/classes
 CLEANPATH += target/test-classes
 #CLEANPATH += target/jni/*
@@ -28,9 +28,13 @@ clean:
 # 		com.diplab.activiti.test.process.TestOpenOnRpiLight
 
 toggleSwitch:
-	sudo mvn install exec:java -DskipTests \
+	sudo mvn install exec:java $(MAVEN_FLAG) \
 		-Dexec.mainClass=com.diplab.activitionrpi.device.RpiTrunLightController
 
 toggleSwitch_activiti:
-	sudo mvn install exec:java -DskipTests -Dexec.classpathScope=test\
+	sudo mvn install exec:java $(MAVEN_FLAG) -Dexec.classpathScope=test\
 		-Dexec.mainClass=com.diplab.activitionrpi.test.process.TestOpenOnRpiLight
+
+readCO2:
+	sudo mvn install exec:java $(MAVEN_FLAG) \
+		-Dexec.mainClass=com.diplab.activitionrpi.device.RpiCO2
