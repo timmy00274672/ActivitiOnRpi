@@ -13,12 +13,12 @@ public class RpiCO2 {
 	private static final long READ_SAMPLE_INTERVAL = 100;
 
 	/********************** Application Related Macros **********************************/
-	private static final double ZERO_POINT_VOLTAGE = 0.531;
-	private static final double REACTION_VOLTGAE = 0.020;
+	private static final double ZERO_POINT_VOLTAGE = 0.49657;
 
 	/***************************** Globals ***********************************************/
-	private static double[] CO2Curve = { 2.602, ZERO_POINT_VOLTAGE,
-			((REACTION_VOLTGAE / (2.602 - 3))) };
+	// {x, y, slope} > (x,y) = (0.280,log(4000)), (0.324, log(400)) slope =
+	// -0.044
+	private static double[] CO2Curve = { 2.602, ZERO_POINT_VOLTAGE, -0.044 };
 
 	static {
 		Spi.wiringPiSPISetup(Spi.CHANNEL_0, 500000);
@@ -76,6 +76,7 @@ public class RpiCO2 {
 
 	static public double get() {
 		double volts = MGRead(MG_PIN);
+		System.out.println(volts + "ppm");
 		double ppm = MGGetPpm(volts, CO2Curve);
 
 		if (ppm == -1)
